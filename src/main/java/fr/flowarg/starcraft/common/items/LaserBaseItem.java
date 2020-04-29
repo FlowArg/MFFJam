@@ -18,7 +18,7 @@ public class LaserBaseItem extends Item implements IHasLocation, IHasLaserColor
 
     public LaserBaseItem(LaserColor laserColor)
     {
-        super(new Properties().setNoRepair().group(Main.ITEM_GROUP).rarity(Rarity.UNCOMMON));
+        super(new Properties().setNoRepair().rarity(Rarity.UNCOMMON).group(Main.ITEM_GROUP));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(this.laserColor.getName() + "_laser_base"));
     }

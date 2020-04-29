@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#|#",
+    "ARA",
+    "#|#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "|": {
+      "item": "minecraft:end_rod"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "A": {
+      "item": "minecraft:black_dye"
+    }
+  },
+  "result": {
+    "item": "starcraft:red_laser_base"
+  }
+}

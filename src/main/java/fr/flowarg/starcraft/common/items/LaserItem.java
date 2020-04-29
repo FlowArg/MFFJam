@@ -103,39 +103,18 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
             final int y = pos.getY();
             final int z = pos.getZ();
             final PlayerEntity player = (PlayerEntity)entityLiving;
-
-            if (!this.check(x, y, z, worldIn, player))
-                return true;
-            else
-            {
-                for (int i = 0; i < 32; i++)
-                {
-                    if (!this.check(x + i, y, z, worldIn, player))
-                    {
-                        for (int j = 0; j < 32; j++)
-                        {
-                            if (!this.check(x, y + j, z, worldIn, player))
-                            {
-                                for (int k = 0; k < 32; k++)
-                                {
-                                    if (!this.check(x, y, z + k, worldIn, player))
-                                        break;
-                                }
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
+            this.lookY(x, y, z, worldIn, player);
         }
         return true;
     }
 
-    private boolean check(int x, int y, int z, World worldIn, PlayerEntity player)
+    private void lookY(final int x, int y, final int z, World world, PlayerEntity player)
     {
-        final BlockPos blockPos = this.convertXYZToBlockPos(x, y, z);
-        return this.deleteIfBlockIsALog(this.convertBlockPosToBlock(worldIn, blockPos), worldIn, blockPos, player);
+        final BlockPos pos = this.convertXYZToBlockPos(x, y, z);
+        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos.up()), world, pos.up(), player))
+        {
+            ;
+        }
     }
 
     private boolean deleteIfBlockIsALog(Block block, World world, BlockPos pos, PlayerEntity player)

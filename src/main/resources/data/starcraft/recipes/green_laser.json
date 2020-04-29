@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    " # ",
+    " | "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:green_dye"
+    },
+    "|": {
+      "item": "starcraft:green_laser_base"
+    }
+  },
+  "result": {
+    "item": "starcraft:green_laser"
+  }
+}

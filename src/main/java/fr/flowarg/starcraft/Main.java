@@ -26,6 +26,7 @@ public class Main
 {
     public static final String    MODID      = "starcraft";
     public static final Logger    LOGGER     = LogManager.getLogger("StarCraft");
+    @OnlyIn(Dist.CLIENT)
     public static final ItemGroup ITEM_GROUP = new StarCraftItemGroup();
 
     public Main()
