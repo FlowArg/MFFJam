@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://github.com/FlowArg/MFFJam/issues"
+
+[[mods]]
+modId="starcraft"
+version="1.0.0"
+displayName="StarCraft"
+displayURL="https://github.com/FlowArg/MFFJam"
+logoFile="starcraft.png"
+credits="FlowArg :kappa:"
+authors="Have a good game !"
+
+description='''
+This is a Minecraft Mod created by Flow Arg (FlowArg) for the MFF Jam "confined" edition.
+The mod add some features about star wars.
+
+Fun fact : I never saw Star Wars of my life!!
+'''
+
+[[dependencies.starcraft]] #optional
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+# Here's another dependency
+[[dependencies.starcraft]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

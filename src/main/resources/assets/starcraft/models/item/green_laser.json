@@ -1,0 +1,5 @@
+{
+  "loader": "forge:obj",
+  "model": "starcraft:models/item/green_laser.obj",
+  "flip-v": true
+}

@@ -1,0 +1,5 @@
+{
+  "loader": "forge:obj",
+  "model": "starcraft:models/item/laser_base.obj",
+  "flip-v": false
+}
