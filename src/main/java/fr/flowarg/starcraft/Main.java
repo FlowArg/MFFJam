@@ -49,8 +49,8 @@ public class Main
         public static final IItemTier LASER_TIER       = new LaserTier();
         public static final Item      GREEN_LASER      = new LaserItem(LaserColor.GREEN);
         public static final Item      RED_LASER        = new LaserItem(LaserColor.RED);
-        public static final Item      GREEN_LASER_BASE = new LaserBaseItem(LaserColor.GREEN);
-        public static final Item      RED_LASER_BASE   = new LaserBaseItem(LaserColor.RED);
+        public static final Item      GREEN_LASER_BASE = new LaserBaseItem(LaserColor.GREEN, LASER_TIER);
+        public static final Item      RED_LASER_BASE   = new LaserBaseItem(LaserColor.RED, LASER_TIER);
 
         @SubscribeEvent
         public static void onItemRegister(final RegistryEvent.Register<Item> event)

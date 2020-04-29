@@ -5,6 +5,7 @@ import fr.flowarg.starcraft.Main.RegistryHandler;
 import fr.flowarg.starcraft.common.utils.IHasLaserColor;
 import fr.flowarg.starcraft.common.utils.IHasLocation;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
@@ -16,9 +17,9 @@ public class LaserBaseItem extends Item implements IHasLocation, IHasLaserColor
 {
     private final LaserColor laserColor;
 
-    public LaserBaseItem(LaserColor laserColor)
+    public LaserBaseItem(LaserColor laserColor, IItemTier tier)
     {
-        super(new Properties().setNoRepair().rarity(Rarity.UNCOMMON).group(Main.ITEM_GROUP));
+        super(new Properties().setNoRepair().rarity(Rarity.UNCOMMON).group(Main.ITEM_GROUP).defaultMaxDamage(tier.getMaxUses()));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(this.laserColor.getName() + "_laser_base"));
     }
