@@ -4,24 +4,39 @@ import fr.flowarg.starcraft.Main;
 import fr.flowarg.starcraft.Main.RegistryHandler;
 import fr.flowarg.starcraft.common.utils.IHasLaserColor;
 import fr.flowarg.starcraft.common.utils.IHasLocation;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
+import net.minecraft.item.TieredItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class LaserBaseItem extends Item implements IHasLocation, IHasLaserColor
+public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaserColor
 {
     private final LaserColor laserColor;
 
-    public LaserBaseItem(LaserColor laserColor, IItemTier tier)
+    public LaserBaseItem(LaserColor laserColor)
     {
-        super(new Properties().setNoRepair().rarity(Rarity.UNCOMMON).group(Main.ITEM_GROUP).defaultMaxDamage(tier.getMaxUses()));
+        super(RegistryHandler.LASER_TIER, new Properties().rarity(Rarity.UNCOMMON).group(Main.ITEM_GROUP).maxStackSize(1).maxDamage(150));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(this.laserColor.getName() + "_laser_base"));
+    }
+
+    @Override
+    public boolean canPlayerBreakBlockWhileHolding(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+    {
+        return !player.isCreative();
+    }
+
+    @Override
+    public boolean canHarvestBlock(BlockState blockIn)
+    {
+        return false;
     }
 
     @Override
@@ -44,6 +59,20 @@ public class LaserBaseItem extends Item implements IHasLocation, IHasLaserColor
             return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
         }
         return ActionResult.resultPass(playerIn.getHeldItem(handIn));
+    }
+
+    @Override
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
+    {
+        if (state.getBlockHardness(worldIn, pos) != 0.0F)
+            stack.damageItem(2, entityLiving, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        return true;
+    }
+
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+    {
+        stack.damageItem(1, attacker, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        return true;
     }
 
     @Override

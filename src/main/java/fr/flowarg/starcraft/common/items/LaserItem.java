@@ -27,7 +27,7 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
 
     public LaserItem(LaserColor laserColor)
     {
-        super(RegistryHandler.LASER_TIER, 0, 24, new Properties().group(Main.ITEM_GROUP).maxStackSize(1).rarity(Rarity.UNCOMMON).setNoRepair().maxDamage(200));
+        super(RegistryHandler.LASER_TIER, 0, 24, new Properties().group(Main.ITEM_GROUP).maxStackSize(1).rarity(Rarity.UNCOMMON).maxDamage(150));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(laserColor.getName() + "_laser"));
     }
@@ -75,15 +75,14 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
     @Override
     public boolean canHarvestBlock(BlockState blockIn)
     {
-        final Block block = blockIn.getBlock();
-        return block == Blocks.STONE || block == Blocks.COBBLESTONE;
+        return blockIn.getMaterial() == Material.ROCK;
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state)
     {
         final Material material = state.getMaterial();
-        return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.isIn(BlockTags.LEAVES) && material != Material.GOURD && material != Material.ROCK && material != Material.WOOD ? 2.1F : 10.6F;
+        return material !=  Material.WEB && material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.isIn(BlockTags.LEAVES) && material != Material.GOURD && material != Material.ROCK && material != Material.WOOD ? 2.1F : 10.6F;
     }
 
     @Override
@@ -97,32 +96,31 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
     {
         if (state.getBlockHardness(worldIn, pos) != 0.0F)
             stack.damageItem(2, entityLiving, (entity) -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
-        if (state.getBlock() instanceof LogBlock && entityLiving instanceof PlayerEntity)
+        if (state.getBlock() instanceof LogBlock)
         {
             final int x = pos.getX();
             final int y = pos.getY();
             final int z = pos.getZ();
-            final PlayerEntity player = (PlayerEntity)entityLiving;
-            this.lookY(x, y, z, worldIn, player);
+            this.lookY(x, y, z, worldIn);
         }
         return true;
     }
 
-    private void lookY(final int x, int y, final int z, World world, PlayerEntity player)
+    private void lookY(final int x, int y, final int z, World world)
     {
         BlockPos pos = this.convertXYZToBlockPos(x, y, z);
-        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos = pos.up()), world, pos, player))
+        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos = pos.up()), world, pos))
         {
             ;
         }
     }
 
-    private boolean deleteIfBlockIsALog(Block block, World world, BlockPos pos, PlayerEntity player)
+    private boolean deleteIfBlockIsALog(Block block, World world, BlockPos pos)
     {
         if (block instanceof LogBlock)
         {
             world.removeBlock(pos, false);
-            block.onBlockHarvested(world, pos, block.getDefaultState(), player);
+            Block.spawnDrops(block.getDefaultState(), world, pos);
             return true;
         }
         return false;

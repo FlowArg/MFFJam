@@ -1,6 +1,7 @@
 package fr.flowarg.starcraft.common.materials;
 
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 
 public class LaserTier implements IItemTier
@@ -38,6 +39,6 @@ public class LaserTier implements IItemTier
     @Override
     public Ingredient getRepairMaterial()
     {
-        return Ingredient.EMPTY;
+        return Ingredient.fromItems(Items.IRON_INGOT);
     }
 }

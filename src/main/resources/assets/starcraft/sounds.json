@@ -1,0 +1,39 @@
+{
+  "yoda_songs": {
+    "category": "entity",
+    "sounds": [
+      {
+        "name": "starcraft:la-mort-est-un-element-naturel",
+        "stream": true
+      },
+      {
+        "name": "starcraft:la-peur-est-le-chemin-du-cote-obscur",
+        "stream": true
+      },
+      {
+        "name": "starcraft:la-peur-mene",
+        "stream": true
+      },
+      {
+        "name": "starcraft:la-taille-importe-peu",
+        "stream": true
+      },
+      {
+        "name": "starcraft:peur-as-tu",
+        "stream": true
+      },
+      {
+        "name": "starcraft:peur-tu-as-de-la-perde",
+        "stream": true
+      },
+      {
+        "name": "starcraft:tu-as-trouve-qqun",
+        "stream": true
+      },
+      {
+        "name": "starcraft:tu-auras-peur",
+        "stream": true
+      }
+    ]
+  }
+}
