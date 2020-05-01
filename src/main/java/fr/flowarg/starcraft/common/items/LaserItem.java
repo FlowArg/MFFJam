@@ -42,16 +42,18 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
                 {
                     if (this.isRed())
                     {
+                        final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
                         final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
-                        greenLaser.setDamage(this.getDamage(new ItemStack(this)));
-                        System.out.println(greenLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        greenLaser.setDamage(thisItemStack.getDamage());
+                        System.out.println(greenLaser.getDamage() + " and " + thisItemStack.getDamage());
                         playerIn.setHeldItem(handIn, greenLaser);
                     }
                     else
                     {
+                        final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
                         final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
-                        redLaser.setDamage(this.getDamage(new ItemStack(this)));
-                        System.out.println(redLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        redLaser.setDamage(thisItemStack.getDamage());
+                        System.out.println(redLaser.getDamage() + " and " + thisItemStack.getDamage());
                         playerIn.setHeldItem(handIn, redLaser);
                     }
                 }
@@ -59,16 +61,16 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
                 {
                     if (this.isRed())
                     {
+                        final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
                         final ItemStack redLaserBase = new ItemStack(RegistryHandler.RED_LASER_BASE);
-                        redLaserBase.setDamage(this.getDamage(new ItemStack(this)));
-                        System.out.println(redLaserBase.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        redLaserBase.setDamage(thisItemStack.getDamage());
                         playerIn.setHeldItem(handIn, redLaserBase);
                     }
                     else
                     {
+                        final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
                         final ItemStack greenLaserBase = new ItemStack(RegistryHandler.GREEN_LASER_BASE);
-                        greenLaserBase.setDamage(this.getDamage(new ItemStack(this)));
-                        System.out.println(greenLaserBase.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        greenLaserBase.setDamage(thisItemStack.getDamage());
                         playerIn.setHeldItem(handIn, greenLaserBase);
                     }
                 }
@@ -117,7 +119,38 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
         BlockPos pos = this.convertXYZToBlockPos(x, y, z);
         while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos = pos.up()), world, pos))
         {
-            ;
+            this.lookX(pos.getX(), pos.getY(), pos.getZ(), world);
+            this.lookZ(pos.getX(), pos.getY(), pos.getZ(), world);
+        }
+        this.lookX(pos.getX(), pos.getY(), pos.getZ(), world);
+        this.lookZ(pos.getX(), pos.getY(), pos.getZ(), world);
+    }
+
+    private void lookX(int x, int y, int z, World world)
+    {
+        BlockPos pos = this.convertXYZToBlockPos(x, y, z);
+        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos = pos.north()), world, pos))
+        {
+            this.lookY(x, y, z, world);
+        }
+        BlockPos pos1 = this.convertXYZToBlockPos(x, y, z);
+        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos1 = pos1.south()), world, pos1))
+        {
+            this.lookY(x, y, z, world);
+        }
+    }
+
+    private void lookZ(int x, int y, int z, World world)
+    {
+        BlockPos pos = this.convertXYZToBlockPos(x, y, z);
+        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos = pos.west()), world, pos))
+        {
+            this.lookY(x, y, z, world);
+        }
+        BlockPos pos1 = this.convertXYZToBlockPos(x, y, z);
+        while (this.deleteIfBlockIsALog(this.convertBlockPosToBlock(world, pos1 = pos1.east()), world, pos1))
+        {
+            this.lookY(x, y, z, world);
         }
     }
 

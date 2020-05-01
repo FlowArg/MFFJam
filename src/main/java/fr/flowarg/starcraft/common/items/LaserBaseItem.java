@@ -48,16 +48,16 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
             {
                 if (this.isRed())
                 {
+                    final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
                     final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
-                    redLaser.setDamage(this.getDamage(new ItemStack(this)));
-                    System.out.println(redLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                    redLaser.setDamage(thisItemStack.getDamage());
                     playerIn.setHeldItem(handIn, redLaser);
                 }
                 else
                 {
+                    final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
                     final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
-                    greenLaser.setDamage(this.getDamage(new ItemStack(this)));
-                    System.out.println(greenLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                    greenLaser.setDamage(thisItemStack.getDamage());
                     playerIn.setHeldItem(handIn, greenLaser);
                 }
                 return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
@@ -69,14 +69,16 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
     {
-        if (state.getBlockHardness(worldIn, pos) != 0.0F)
-            stack.damageItem(2, entityLiving, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        if (!worldIn.isRemote)
+            if (state.getBlockHardness(worldIn, pos) != 0.0F)
+                stack.damageItem(2, entityLiving, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
         return true;
     }
 
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
     {
-        stack.damageItem(1, attacker, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        if(!attacker.world.isRemote)
+            stack.damageItem(1, attacker, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
         return true;
     }
 
