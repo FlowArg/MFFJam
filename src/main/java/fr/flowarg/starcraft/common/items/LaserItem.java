@@ -6,7 +6,6 @@ import fr.flowarg.starcraft.common.utils.IHasLaserColor;
 import fr.flowarg.starcraft.common.utils.IHasLocation;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.LogBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -35,39 +34,46 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        if (handIn == Hand.MAIN_HAND)
+        if(!worldIn.isRemote)
         {
-            if (playerIn.isSneaking())
+            if (handIn == Hand.MAIN_HAND)
             {
-                if (this.isRed())
+                if (playerIn.isSneaking())
                 {
-                    final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
-                    greenLaser.setDamage(this.getDamage(new ItemStack(this)));
-                    playerIn.setHeldItem(handIn, greenLaser);
+                    if (this.isRed())
+                    {
+                        final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
+                        greenLaser.setDamage(this.getDamage(new ItemStack(this)));
+                        System.out.println(greenLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        playerIn.setHeldItem(handIn, greenLaser);
+                    }
+                    else
+                    {
+                        final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
+                        redLaser.setDamage(this.getDamage(new ItemStack(this)));
+                        System.out.println(redLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        playerIn.setHeldItem(handIn, redLaser);
+                    }
                 }
                 else
                 {
-                    final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
-                    redLaser.setDamage(this.getDamage(new ItemStack(this)));
-                    playerIn.setHeldItem(handIn, redLaser);
+                    if (this.isRed())
+                    {
+                        final ItemStack redLaserBase = new ItemStack(RegistryHandler.RED_LASER_BASE);
+                        redLaserBase.setDamage(this.getDamage(new ItemStack(this)));
+                        System.out.println(redLaserBase.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        playerIn.setHeldItem(handIn, redLaserBase);
+                    }
+                    else
+                    {
+                        final ItemStack greenLaserBase = new ItemStack(RegistryHandler.GREEN_LASER_BASE);
+                        greenLaserBase.setDamage(this.getDamage(new ItemStack(this)));
+                        System.out.println(greenLaserBase.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                        playerIn.setHeldItem(handIn, greenLaserBase);
+                    }
                 }
+                return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
             }
-            else
-            {
-                if (this.isRed())
-                {
-                    final ItemStack redLaserBase = new ItemStack(RegistryHandler.RED_LASER_BASE);
-                    redLaserBase.setDamage(this.getDamage(new ItemStack(this)));
-                    playerIn.setHeldItem(handIn, redLaserBase);
-                }
-                else
-                {
-                    final ItemStack greenLaserBase = new ItemStack(RegistryHandler.GREEN_LASER_BASE);
-                    greenLaserBase.setDamage(this.getDamage(new ItemStack(this)));
-                    playerIn.setHeldItem(handIn, greenLaserBase);
-                }
-            }
-            return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
         }
         return ActionResult.resultPass(playerIn.getHeldItem(handIn));
     }

@@ -7,3 +7,5 @@ build
 .gradle
 run
 forge*changelog.txt
+src/test/
+README.txt

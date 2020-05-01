@@ -3,5 +3,10 @@
   "item.starcraft.red_laser": "Red Laser",
   "item.starcraft.red_laser_base": "Red Laser",
   "item.starcraft.green_laser": "Green Laser",
-  "item.starcraft.green_laser_base": "Green Laser"
+  "item.starcraft.green_laser_base": "Green Laser",
+  "item.starcraft.yoda_egg": "Yoda Spawn Egg",
+  "item.starcraft.storm_trooper_helmet": "Storm Trooper Helmet",
+  "item.starcraft.storm_trooper_chestplate": "Storm Trooper Chestplate",
+  "item.starcraft.storm_trooper_leggings": "Storm Trooper Leggings",
+  "item.starcraft.storm_trooper_boots": "Storm Trooper Boots"
 }

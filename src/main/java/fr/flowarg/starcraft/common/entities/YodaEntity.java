@@ -1,16 +1,17 @@
 package fr.flowarg.starcraft.common.entities;
 
 import fr.flowarg.starcraft.Main;
+import fr.flowarg.starcraft.Main.RegistryHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -44,21 +45,39 @@ public class YodaEntity extends AgeableEntity
     }
 
     @Override
-    public void onDeath(DamageSource cause)
+    public SoundCategory getSoundCategory()
     {
-        if (cause.getImmediateSource() != null)
-            this.playYodaLessons(cause.getImmediateSource());
+        return SoundCategory.AMBIENT;
     }
 
+    @Nullable
     @Override
-    public boolean hitByEntity(Entity entityIn)
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
-        this.playYodaLessons(entityIn);
-        return false;
+        return RegistryHandler.YODA_SONGS;
     }
+
+    protected SoundEvent getStepSound()
+    {
+        return SoundEvents.ENTITY_PANDA_STEP;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound()
+    {
+        return RegistryHandler.YODA_SONGS;
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState blockIn)
+    {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
+    }
+
 
     public void playYodaLessons(Entity entityIn)
     {
         entityIn.playSound(Main.RegistryHandler.YODA_SONGS, 10f, 1f);
+        System.out.println("Playing to : " + entityIn.toString());
     }
 }

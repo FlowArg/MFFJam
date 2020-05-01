@@ -42,21 +42,26 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        if (handIn == Hand.MAIN_HAND)
+        if (!worldIn.isRemote)
         {
-            if (this.isRed())
+            if (handIn == Hand.MAIN_HAND)
             {
-                final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
-                redLaser.setDamage(this.getDamage(new ItemStack(this)));
-                playerIn.setHeldItem(handIn, redLaser);
+                if (this.isRed())
+                {
+                    final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
+                    redLaser.setDamage(this.getDamage(new ItemStack(this)));
+                    System.out.println(redLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                    playerIn.setHeldItem(handIn, redLaser);
+                }
+                else
+                {
+                    final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
+                    greenLaser.setDamage(this.getDamage(new ItemStack(this)));
+                    System.out.println(greenLaser.getDamage() + " and " + this.getDamage(new ItemStack(this)));
+                    playerIn.setHeldItem(handIn, greenLaser);
+                }
+                return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
             }
-            else
-            {
-                final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
-                greenLaser.setDamage(this.getDamage(new ItemStack(this)));
-                playerIn.setHeldItem(handIn, greenLaser);
-            }
-            return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
         }
         return ActionResult.resultPass(playerIn.getHeldItem(handIn));
     }
