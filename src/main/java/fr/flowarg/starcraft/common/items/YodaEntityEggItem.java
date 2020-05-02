@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
 
@@ -23,7 +24,7 @@ public class YodaEntityEggItem extends Item implements IHasLocation
 {
     public YodaEntityEggItem()
     {
-        super(new Properties().group(Main.ITEM_GROUP).maxStackSize(1));
+        super(new Properties().group(Main.STAR_CRAFT_GROUP).maxStackSize(1));
         this.setRegistryName(this.getLocation("yoda_egg"));
     }
 
@@ -38,6 +39,9 @@ public class YodaEntityEggItem extends Item implements IHasLocation
             final Direction  direction  = context.getFace();
             final BlockState blockstate = world.getBlockState(blockpos);
             final Block      block      = blockstate.getBlock();
+
+            itemstack.setDisplayName(new TranslationTextComponent("starcraft.yoda"));
+
             if (block == Blocks.SPAWNER) {
                 final TileEntity tileentity = world.getTileEntity(blockpos);
                 if (tileentity instanceof MobSpawnerTileEntity)

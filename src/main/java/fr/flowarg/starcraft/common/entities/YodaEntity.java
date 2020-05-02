@@ -1,17 +1,21 @@
 package fr.flowarg.starcraft.common.entities;
 
-import fr.flowarg.starcraft.Main;
 import fr.flowarg.starcraft.Main.RegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -21,6 +25,14 @@ public class YodaEntity extends AgeableEntity
     public YodaEntity(EntityType<YodaEntity> type, World worldIn)
     {
         super(type, worldIn);
+    }
+
+    @Override
+    protected void registerGoals()
+    {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 20.0F));
     }
 
     @Nullable
@@ -74,10 +86,9 @@ public class YodaEntity extends AgeableEntity
         this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 
-
-    public void playYodaLessons(Entity entityIn)
+    @Override
+    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
-        entityIn.playSound(Main.RegistryHandler.YODA_SONGS, 10f, 1f);
-        System.out.println("Playing to : " + entityIn.toString());
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(RegistryHandler.GREEN_LASER));
     }
 }

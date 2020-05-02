@@ -1,5 +1,5 @@
 {
-  "itemGroup.starcraft_items": "StarCraft: Items",
+  "itemGroup.starcraft_items": "StarCraft",
   "item.starcraft.red_laser": "Red Laser",
   "item.starcraft.red_laser_base": "Red Laser",
   "item.starcraft.green_laser": "Green Laser",
@@ -8,5 +8,7 @@
   "item.starcraft.storm_trooper_helmet": "Storm Trooper Helmet",
   "item.starcraft.storm_trooper_chestplate": "Storm Trooper Chestplate",
   "item.starcraft.storm_trooper_leggings": "Storm Trooper Leggings",
-  "item.starcraft.storm_trooper_boots": "Storm Trooper Boots"
+  "item.starcraft.storm_trooper_boots": "Storm Trooper Boots",
+  "starcraft.yoda": "Yoda",
+  "block.starcraft.yoda_summoner": "Yoda Summoner"
 }

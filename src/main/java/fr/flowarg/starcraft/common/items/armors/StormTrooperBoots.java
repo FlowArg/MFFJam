@@ -12,7 +12,7 @@ public class StormTrooperBoots extends AbstractRepairableArmorItem
         super("storm_trooper_boots", RegistryHandler.STORM_TROOPER_ARMOR_MATERIAL,
               EquipmentSlotType.FEET,
               new Properties()
-                      .group(Main.ITEM_GROUP)
+                      .group(Main.STAR_CRAFT_GROUP)
                       .rarity(Rarity.UNCOMMON));
     }
 

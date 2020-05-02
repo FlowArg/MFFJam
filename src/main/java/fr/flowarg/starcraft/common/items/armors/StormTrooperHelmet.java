@@ -18,7 +18,7 @@ public class StormTrooperHelmet extends AbstractRepairableArmorItem
         super("storm_trooper_helmet", RegistryHandler.STORM_TROOPER_ARMOR_MATERIAL,
               EquipmentSlotType.HEAD,
               new Properties()
-                      .group(Main.ITEM_GROUP)
+                      .group(Main.STAR_CRAFT_GROUP)
                       .rarity(Rarity.UNCOMMON));
     }
 

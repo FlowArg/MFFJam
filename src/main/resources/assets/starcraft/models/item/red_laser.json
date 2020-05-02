@@ -1,5 +1,5 @@
 {
   "loader": "forge:obj",
   "model": "starcraft:models/item/red_laser.obj",
-  "flip-v": false
+  "flip-v": true
 }

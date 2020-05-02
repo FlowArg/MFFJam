@@ -4,6 +4,7 @@ import fr.flowarg.starcraft.client.creativetabs.StarCraftItemGroup;
 import fr.flowarg.starcraft.client.entities.YodaEntityRendererFactory;
 import fr.flowarg.starcraft.client.guis.CustomInGameMenuScreen;
 import fr.flowarg.starcraft.client.guis.CustomMainMenuScreen;
+import fr.flowarg.starcraft.common.blocks.YodaSummonerBlock;
 import fr.flowarg.starcraft.common.entities.YodaEntity;
 import fr.flowarg.starcraft.common.items.LaserBaseItem;
 import fr.flowarg.starcraft.common.items.LaserColor;
@@ -12,15 +13,15 @@ import fr.flowarg.starcraft.common.items.YodaEntityEggItem;
 import fr.flowarg.starcraft.common.items.armors.*;
 import fr.flowarg.starcraft.common.materials.LaserTier;
 import fr.flowarg.starcraft.common.materials.StormTrooperArmorMaterial;
+import fr.flowarg.starcraft.common.tileentities.YodaSummonerTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.IngameMenuScreen;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.*;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -51,7 +52,7 @@ public class Main
     public static final Logger LOGGER = LogManager.getLogger("StarCraft");
 
     @OnlyIn(Dist.CLIENT)
-    public static final ItemGroup ITEM_GROUP = new StarCraftItemGroup();
+    public static final ItemGroup STAR_CRAFT_GROUP = new StarCraftItemGroup();
 
     public Main()
     {
@@ -79,6 +80,9 @@ public class Main
         public static final Item           RED_LASER_BASE               = new LaserBaseItem(LaserColor.RED);
         public static final Item           YODA_SPAWN_EGG               = new YodaEntityEggItem();
 
+        public static final Block YODA_SUMMONER = new YodaSummonerBlock();
+        public static final BlockItem YODA_SUMMONER_ITEM = new BlockItem(YODA_SUMMONER, new Item.Properties().group(STAR_CRAFT_GROUP));
+
         public static final AbstractRepairableArmorItem STORM_TROOPER_HELMET     = new StormTrooperHelmet();
         public static final AbstractRepairableArmorItem STORM_TROOPER_CHESTPLATE = new StormTrooperChestplate();
         public static final AbstractRepairableArmorItem STORM_TROOPER_LEGGINGS   = new StormTrooperLeggings();
@@ -94,6 +98,8 @@ public class Main
                                                                                    .disableSerialization()
                                                                                    .build("yoda");
 
+        public static final TileEntityType<YodaSummonerTileEntity> YODA_SUMMONER_TILE_ENTITY = TileEntityType.Builder.create(YodaSummonerTileEntity::new, YODA_SUMMONER).build(null);
+
         @SubscribeEvent
         public static void onItemRegister(final RegistryEvent.Register<Item> event)
         {
@@ -106,7 +112,8 @@ public class Main
                     STORM_TROOPER_HELMET,
                     STORM_TROOPER_CHESTPLATE,
                     STORM_TROOPER_LEGGINGS,
-                    STORM_TROOPER_BOOTS
+                    STORM_TROOPER_BOOTS,
+                    YODA_SUMMONER_ITEM.setRegistryName(YODA_SUMMONER.getRegistryName())
             );
         }
 
@@ -123,6 +130,18 @@ public class Main
         public static void onEntityRegister(final RegistryEvent.Register<EntityType<?>> event)
         {
             event.getRegistry().register(YODA_ENTITY.setRegistryName(MODID, "yoda"));
+        }
+
+        @SubscribeEvent
+        public static void onBlockRegister(final RegistryEvent.Register<Block> event)
+        {
+            event.getRegistry().register(YODA_SUMMONER);
+        }
+
+        @SubscribeEvent
+        public static void onTileEntitiesRegister(final RegistryEvent.Register<TileEntityType<?>> event)
+        {
+            event.getRegistry().register(YODA_SUMMONER_TILE_ENTITY.setRegistryName("yoda_summoner_tile_entity"));
         }
     }
 

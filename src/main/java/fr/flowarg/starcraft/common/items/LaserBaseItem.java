@@ -22,7 +22,7 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
 
     public LaserBaseItem(LaserColor laserColor)
     {
-        super(RegistryHandler.LASER_TIER, new Properties().rarity(Rarity.UNCOMMON).group(Main.ITEM_GROUP).maxStackSize(1).maxDamage(150));
+        super(RegistryHandler.LASER_TIER, new Properties().rarity(Rarity.UNCOMMON).group(Main.STAR_CRAFT_GROUP).maxStackSize(1).maxDamage(150));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(this.laserColor.getName() + "_laser_base"));
     }

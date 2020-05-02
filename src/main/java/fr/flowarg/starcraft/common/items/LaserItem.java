@@ -26,7 +26,7 @@ public class LaserItem extends SwordItem implements IHasLocation, IHasLaserColor
 
     public LaserItem(LaserColor laserColor)
     {
-        super(RegistryHandler.LASER_TIER, 0, 24, new Properties().group(Main.ITEM_GROUP).maxStackSize(1).rarity(Rarity.UNCOMMON).maxDamage(150));
+        super(RegistryHandler.LASER_TIER, 0, 24, new Properties().group(Main.STAR_CRAFT_GROUP).maxStackSize(1).rarity(Rarity.UNCOMMON).maxDamage(150));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(laserColor.getName() + "_laser"));
     }

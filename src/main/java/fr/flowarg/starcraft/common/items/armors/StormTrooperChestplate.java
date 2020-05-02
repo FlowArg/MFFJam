@@ -12,7 +12,7 @@ public class StormTrooperChestplate extends AbstractRepairableArmorItem
         super("storm_trooper_chestplate", RegistryHandler.STORM_TROOPER_ARMOR_MATERIAL,
               EquipmentSlotType.CHEST,
               new Properties()
-                      .group(Main.ITEM_GROUP)
+                      .group(Main.STAR_CRAFT_GROUP)
                       .rarity(Rarity.UNCOMMON));
     }
 }
