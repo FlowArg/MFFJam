@@ -4,7 +4,7 @@ issueTrackerURL="https://github.com/FlowArg/MFFJam/issues"
 
 [[mods]]
 modId="starcraft"
-version="1.0.0"
+version="1.0.1"
 displayName="StarCraft"
 displayURL="https://github.com/FlowArg/MFFJam"
 logoFile="starcraft.png"
