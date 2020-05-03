@@ -65,7 +65,7 @@ public class CustomInGameMenuScreen extends Screen
             button.active = this.minecraft.isSingleplayer() && !Objects.requireNonNull(this.minecraft.getIntegratedServer()).getPublic();
         Button button1 = this.addButton(new Button(this.width / 2 - 102, this.height / 4 + 96 + -16, 204, 20, I18n.format("menu.returnToMenu"), (button3) ->
         {
-            boolean flag  = this.minecraft.isIntegratedServerRunning();
+            boolean flag = this.minecraft.isIntegratedServerRunning();
             button3.active = false;
 
             if (this.minecraft.world != null) this.minecraft.world.sendQuittingDisconnectingPacket();

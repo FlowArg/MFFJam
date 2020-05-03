@@ -34,7 +34,7 @@ public class YodaEntityEggItem extends Item implements IHasLocation
         final World world = context.getWorld();
         if (!world.isRemote)
         {
-            final ItemStack itemstack = context.getItem();
+            final ItemStack  itemstack  = context.getItem();
             final BlockPos   blockpos   = context.getPos();
             final Direction  direction  = context.getFace();
             final BlockState blockstate = world.getBlockState(blockpos);
@@ -42,7 +42,8 @@ public class YodaEntityEggItem extends Item implements IHasLocation
 
             itemstack.setDisplayName(new TranslationTextComponent("starcraft.yoda"));
 
-            if (block == Blocks.SPAWNER) {
+            if (block == Blocks.SPAWNER)
+            {
                 final TileEntity tileentity = world.getTileEntity(blockpos);
                 if (tileentity instanceof MobSpawnerTileEntity)
                 {

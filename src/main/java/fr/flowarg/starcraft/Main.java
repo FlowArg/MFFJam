@@ -5,6 +5,7 @@ import fr.flowarg.starcraft.client.entities.YodaEntityRendererFactory;
 import fr.flowarg.starcraft.client.guis.CustomInGameMenuScreen;
 import fr.flowarg.starcraft.client.guis.CustomMainMenuScreen;
 import fr.flowarg.starcraft.common.blocks.YodaSummonerBlock;
+import fr.flowarg.starcraft.common.capabilities.force.ForceCapability;
 import fr.flowarg.starcraft.common.entities.YodaEntity;
 import fr.flowarg.starcraft.common.items.LaserBaseItem;
 import fr.flowarg.starcraft.common.items.LaserColor;
@@ -13,9 +14,12 @@ import fr.flowarg.starcraft.common.items.YodaEntityEggItem;
 import fr.flowarg.starcraft.common.items.armors.*;
 import fr.flowarg.starcraft.common.materials.LaserTier;
 import fr.flowarg.starcraft.common.materials.StormTrooperArmorMaterial;
+import fr.flowarg.starcraft.common.network.StarCraftNetwork;
 import fr.flowarg.starcraft.common.tileentities.YodaSummonerTileEntity;
+import fr.flowarg.starcraft.common.utils.StarCraftConfig;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.IngameMenuScreen;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.entity.EntityClassification;
@@ -31,19 +35,24 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 @Mod(Main.MODID)
 public class Main
@@ -58,9 +67,15 @@ public class Main
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
+        ModLoadingContext.get().registerConfig(Type.CLIENT, StarCraftConfig.CLIENT_SPECS);
     }
 
-    public void setupCommon(final FMLCommonSetupEvent event) { LOGGER.info("FML is loading StarCraft Mod !"); }
+    public void setupCommon(final FMLCommonSetupEvent event)
+    {
+        LOGGER.info("FML is loading StarCraft Mod !");
+        StarCraftNetwork.registerPackets();
+        ForceCapability.register();
+    }
 
     @OnlyIn(Dist.CLIENT)
     public void setupClient(final FMLClientSetupEvent event)
@@ -80,7 +95,7 @@ public class Main
         public static final Item           RED_LASER_BASE               = new LaserBaseItem(LaserColor.RED);
         public static final Item           YODA_SPAWN_EGG               = new YodaEntityEggItem();
 
-        public static final Block YODA_SUMMONER = new YodaSummonerBlock();
+        public static final Block     YODA_SUMMONER      = new YodaSummonerBlock();
         public static final BlockItem YODA_SUMMONER_ITEM = new BlockItem(YODA_SUMMONER, new Item.Properties().group(STAR_CRAFT_GROUP));
 
         public static final AbstractRepairableArmorItem STORM_TROOPER_HELMET     = new StormTrooperHelmet();
@@ -145,8 +160,9 @@ public class Main
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     @EventBusSubscriber(modid = MODID, bus = Bus.MOD, value = Dist.CLIENT)
-    public static class ClientEventHandler
+    public static class ClientRegistryEventHandler
     {
         @SubscribeEvent
         public static void onHandleItemColor(ColorHandlerEvent.Item event)
@@ -155,12 +171,13 @@ public class Main
         }
     }
 
-    @EventBusSubscriber(modid = MODID, bus = Bus.FORGE)
-    public static class EventHandler
+    @OnlyIn(Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, bus = Bus.FORGE, value = Dist.CLIENT)
+    public static class ClientEventHandler
     {
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
-        public static void onPlayerInteractWithEntity(PlayerInteractEvent.EntityInteractSpecific event)
+        public static void onPlayerInteractWithEntity(final PlayerInteractEvent.EntityInteractSpecific event)
         {
             final World world = event.getWorld();
             if (event.getTarget() instanceof YodaEntity)
@@ -168,9 +185,9 @@ public class Main
                 if (world.isRemote && event.getHand() == Hand.MAIN_HAND)
                 {
                     final YodaEntity yoda = (YodaEntity)event.getTarget();
-                    final double posX = yoda.getPosX();
-                    final double posY = yoda.getPosY();
-                    final double posZ = yoda.getPosZ();
+                    final double     posX = yoda.getPosX();
+                    final double     posY = yoda.getPosY();
+                    final double     posZ = yoda.getPosZ();
 
                     world.playSound(posX, posY, posZ, RegistryHandler.YODA_SONGS, SoundCategory.AMBIENT, 10f, 1f, true);
                 }
@@ -179,18 +196,28 @@ public class Main
 
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent(priority = EventPriority.HIGHEST)
-        public static void onGuiOpenedEvent(GuiOpenEvent event)
+        public static void onGuiOpenedEvent(final GuiOpenEvent event)
         {
-            if (event.getGui() != null)
+            if (event.getGui() != null && !StarCraftConfig.CLIENT.canShowRealms().get())
             {
                 if (event.getGui().getClass() == MainMenuScreen.class)
-                {
                     event.setGui(new CustomMainMenuScreen(true));
-                }
                 else if (event.getGui().getClass() == IngameMenuScreen.class)
-                {
                     event.setGui(new CustomInGameMenuScreen(!Minecraft.getInstance().isIntegratedServerRunning()));
-                }
+            }
+        }
+
+        @OnlyIn(Dist.CLIENT)
+        @SubscribeEvent
+        public static void onRenderGameOverlay(final RenderGameOverlayEvent.Text event)
+        {
+            if (StarCraftConfig.CLIENT.canShowForceOnOverlay().get())
+            {
+                final AtomicReference<String> stringForce = new AtomicReference<>("");
+                final ClientPlayerEntity      player      = Minecraft.getInstance().player;
+
+                player.getCapability(ForceCapability.FORCE_CAPABILITY).ifPresent(iForce -> stringForce.set("Force in you : " + iForce.getForce() + "%"));
+                event.getRight().add(stringForce.get());
             }
         }
     }

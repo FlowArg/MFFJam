@@ -39,19 +39,16 @@ public class CustomMainMenuScreen extends Screen
     private static final ResourceLocation PANORAMA_OVERLAY_TEXTURES = new ResourceLocation("textures/gui/title/background/panorama_overlay.png");
     private static final ResourceLocation ACCESSIBILITY_TEXTURES    = new ResourceLocation("textures/gui/accessibility.png");
 
-    private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
-    private static final ResourceLocation MINECRAFT_TITLE_EDITION  = new ResourceLocation("textures/gui/title/edition.png");
-
-    private int     widthCopyright;
-    private int     widthCopyrightRest;
-    private long    firstRenderTime;
-    private String  splashText;
-
-    private final RenderSkybox panorama = new RenderSkybox(PANORAMA_RESOURCES);
-    private final boolean      showFadeInAnimation;
-    private final boolean      showTitleWronglySpelled;
-
-    private NotificationModUpdateScreen modUpdateNotification;
+    private static final ResourceLocation            MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
+    private static final ResourceLocation            MINECRAFT_TITLE_EDITION  = new ResourceLocation("textures/gui/title/edition.png");
+    private final        RenderSkybox                panorama                 = new RenderSkybox(PANORAMA_RESOURCES);
+    private final        boolean                     showFadeInAnimation;
+    private final        boolean                     showTitleWronglySpelled;
+    private              int                         widthCopyright;
+    private              int                         widthCopyrightRest;
+    private              long                        firstRenderTime;
+    private              String                      splashText;
+    private              NotificationModUpdateScreen modUpdateNotification;
 
     public CustomMainMenuScreen(boolean fadeIn)
     {
@@ -85,7 +82,7 @@ public class CustomMainMenuScreen extends Screen
 
         this.widthCopyright     = this.font.getStringWidth("Copyright Mojang AB. Do not distribute!");
         this.widthCopyrightRest = this.width - this.widthCopyright - 2;
-        int    j         = this.height / 4 + 48;
+        int j = this.height / 4 + 48;
 
 
         this.addSingleplayerMultiplayerButtons(j);
@@ -214,11 +211,14 @@ public class CustomMainMenuScreen extends Screen
             }
 
             String line = null;
-            switch(status)
+            switch (status)
             {
                 case OUTDATED:
-                case BETA_OUTDATED: line = I18n.format("forge.update.newversion", ForgeVersion.getTarget()); break;
-                default: break;
+                case BETA_OUTDATED:
+                    line = I18n.format("forge.update.newversion", ForgeVersion.getTarget());
+                    break;
+                default:
+                    break;
             }
 
             ForgeHooksClient.forgeStatusLine = line;
@@ -247,7 +247,7 @@ public class CustomMainMenuScreen extends Screen
             );
 
             BrandingControl.forEachAboveCopyrightLine((brdline, brd) ->
-                                                                                     this.drawString(this.font, brd, this.width - font.getStringWidth(brd), this.height - (10 + (brdline + 1) * (this.font.FONT_HEIGHT + 1)), 16777215 | l)
+                                                              this.drawString(this.font, brd, this.width - font.getStringWidth(brd), this.height - (10 + (brdline + 1) * (this.font.FONT_HEIGHT + 1)), 16777215 | l)
             );
             this.drawString(this.font, "Copyright Mojang AB. Do not distribute!", this.widthCopyrightRest, this.height - 10, 16777215 | l);
             if (p_render_1_ > this.widthCopyrightRest && p_render_1_ < this.widthCopyrightRest + this.widthCopyright && p_render_2_ > this.height - 10 && p_render_2_ < this.height)

@@ -1,6 +1,7 @@
 package fr.flowarg.starcraft.common.tileentities;
 
 import fr.flowarg.starcraft.Main;
+import net.minecraft.block.Block;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -227,6 +228,7 @@ public class YodaSummonerTileEntity extends TileEntity implements ITickableTileE
                 {
                     final YodaSummonerTileEntity t = (YodaSummonerTileEntity)tile;
                     this.world.removeBlock(t.pos, false);
+                    Block.spawnDrops(this.getBlockState(), this.world, t.pos);
                 }
             }
         }

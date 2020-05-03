@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public abstract class AbstractRepairableArmorItem extends ArmorItem implements IHasLocation
 {
     private static final int DELAY = 40;
-    private int ticks = DELAY;
+    private              int ticks = DELAY;
 
     public AbstractRepairableArmorItem(String name, IArmorMaterial materialIn, EquipmentSlotType slot, Properties builder)
     {
@@ -24,10 +24,15 @@ public abstract class AbstractRepairableArmorItem extends ArmorItem implements I
     {
         if (this.ticks == 0)
         {
-            if (stack.getDamage() > 0)
-                stack.setDamage(stack.getDamage() - 1);
+            this.onTimerTick(stack, world, player);
             this.ticks = DELAY;
         }
         else this.ticks--;
+    }
+
+    protected void onTimerTick(ItemStack stack, World world, PlayerEntity player)
+    {
+        if (stack.getDamage() > 0)
+            stack.setDamage(stack.getDamage() - 1);
     }
 }

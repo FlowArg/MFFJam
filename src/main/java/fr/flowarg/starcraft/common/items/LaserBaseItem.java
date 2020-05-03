@@ -2,12 +2,12 @@ package fr.flowarg.starcraft.common.items;
 
 import fr.flowarg.starcraft.Main;
 import fr.flowarg.starcraft.Main.RegistryHandler;
+import fr.flowarg.starcraft.common.capabilities.force.ForceCapability;
 import fr.flowarg.starcraft.common.utils.IHasLaserColor;
 import fr.flowarg.starcraft.common.utils.IHasLocation;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.item.TieredItem;
@@ -22,7 +22,7 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
 
     public LaserBaseItem(LaserColor laserColor)
     {
-        super(RegistryHandler.LASER_TIER, new Properties().rarity(Rarity.UNCOMMON).group(Main.STAR_CRAFT_GROUP).maxStackSize(1).maxDamage(150));
+        super(RegistryHandler.LASER_TIER, new Properties().rarity(Rarity.UNCOMMON).group(Main.STAR_CRAFT_GROUP).maxStackSize(1));
         this.laserColor = laserColor;
         this.setRegistryName(this.getLocation(this.laserColor.getName() + "_laser_base"));
     }
@@ -46,20 +46,11 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
         {
             if (handIn == Hand.MAIN_HAND)
             {
+                ItemStack newLaser;
                 if (this.isRed())
-                {
-                    final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
-                    final ItemStack redLaser = new ItemStack(RegistryHandler.RED_LASER);
-                    redLaser.setDamage(thisItemStack.getDamage());
-                    playerIn.setHeldItem(handIn, redLaser);
-                }
-                else
-                {
-                    final ItemStack thisItemStack = playerIn.getHeldItem(handIn);
-                    final ItemStack greenLaser = new ItemStack(RegistryHandler.GREEN_LASER);
-                    greenLaser.setDamage(thisItemStack.getDamage());
-                    playerIn.setHeldItem(handIn, greenLaser);
-                }
+                    newLaser = new ItemStack(RegistryHandler.RED_LASER);
+                else newLaser = new ItemStack(RegistryHandler.GREEN_LASER);
+                playerIn.setHeldItem(handIn, newLaser);
                 return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
             }
         }
@@ -70,15 +61,38 @@ public class LaserBaseItem extends TieredItem implements IHasLocation, IHasLaser
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving)
     {
         if (!worldIn.isRemote)
-            if (state.getBlockHardness(worldIn, pos) != 0.0F)
-                stack.damageItem(2, entityLiving, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        {
+            if (entityLiving instanceof PlayerEntity)
+            {
+                final PlayerEntity player = (PlayerEntity)entityLiving;
+                player.getCapability(ForceCapability.FORCE_CAPABILITY).ifPresent(force ->
+                                                                                 {
+                                                                                     force.decreaseForce(2);
+                                                                                     if (force.getForce() == 0)
+                                                                                         player.setHealth(player.getHealth() - 3f);
+                                                                                 });
+            }
+        }
         return true;
     }
 
+    @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
     {
-        if(!attacker.world.isRemote)
-            stack.damageItem(1, attacker, (player) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        if (!target.world.isRemote)
+        {
+            if (attacker instanceof PlayerEntity)
+            {
+                final PlayerEntity player = (PlayerEntity)attacker;
+                player.getCapability(ForceCapability.FORCE_CAPABILITY).ifPresent(iForce ->
+                                                                                 {
+                                                                                     iForce.decreaseForce(1);
+                                                                                     if (iForce.getForce() == 0)
+                                                                                         player.setHealth(player.getHealth() - 3f);
+                                                                                 });
+
+            }
+        }
         return true;
     }
 

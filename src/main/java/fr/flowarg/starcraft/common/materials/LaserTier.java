@@ -9,7 +9,7 @@ public class LaserTier implements IItemTier
     @Override
     public int getMaxUses()
     {
-        return 150;
+        return Integer.MAX_VALUE;
     }
 
     @Override
