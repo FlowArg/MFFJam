@@ -60,7 +60,6 @@ public class Main
     public static final String MODID  = "starcraft";
     public static final Logger LOGGER = LogManager.getLogger("StarCraft");
 
-    @OnlyIn(Dist.CLIENT)
     public static final ItemGroup STAR_CRAFT_GROUP = new StarCraftItemGroup();
 
     public Main()
@@ -77,7 +76,6 @@ public class Main
         ForceCapability.register();
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void setupClient(final FMLClientSetupEvent event)
     {
         LOGGER.info("FML is loading client part of StarCraft Mod !");
@@ -160,7 +158,6 @@ public class Main
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @EventBusSubscriber(modid = MODID, bus = Bus.MOD, value = Dist.CLIENT)
     public static class ClientRegistryEventHandler
     {
@@ -171,7 +168,6 @@ public class Main
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @EventBusSubscriber(modid = MODID, bus = Bus.FORGE, value = Dist.CLIENT)
     public static class ClientEventHandler
     {
