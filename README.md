@@ -1,4 +1,4 @@
-e# StarCraft
+# StarCraft
 
 StarCraft is a little Minecraft Mod based on StarWars.<br>
 If you want to contribute to project, make a fork, and pull request.<br>
